@@ -2,13 +2,13 @@ const ctrl = {}
 
 const Usuario = require('../models/Usuario.js');
 
-ctrl.agregarUsuario = (req,res) => {
+ctrl.agregarUsuario = async(req,res) => {
 
     const usuario = new Usuario({
         nombre: req.body.nombre,
         apellido: req.body.apellido
     });
-    usuario.save(), () => {
+   await usuario.save(), () => {
         if (err) return handleError(err);
     };
 

@@ -6,7 +6,7 @@ const usuarios = require("../controllers/usuarios.js");
 
 //LISTADO DE LAS RUTAS
 router.get("/", usuarios.getTodo);
-//router.get("/usuarios",usuarios.agregarUsuario);
+router.get("/usuarios",usuarios.agregarUsuario);
 router.post("/usuarios",usuarios.agregarUsuario);
 
 

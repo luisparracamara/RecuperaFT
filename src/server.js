@@ -45,8 +45,8 @@ app.use(require("./routes/routes.js"));
 
 
 //manejador de errores de rutas
-// app.use(middleware.primer);
-// app.use(middleware.segundo);
+app.use(middleware.primer);
+app.use(middleware.segundo);
 
 //Conectarse a la base de datos
 //---cambiar en la url de mongo atlas la parte de ?admin por el nombre de la base de datos

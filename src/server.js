@@ -49,11 +49,13 @@ app.use(middleware.primer);
 app.use(middleware.segundo);
 
 //Conectarse a la base de datos
-mongoose.connect('mongodb+srv://luis:luisparra@recuperaft-igqhw.mongodb.net/admin?retryWrites=true&w=majority?authSource=admin', {
+//---cambiar en la url de mongo atlas la parte de ?admin por el nombre de la base de datos
+mongoose.connect(process.env.URLDB, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true
-});
+}).then(db => console.log("db conectada"))
+    .catch(err => console.log(err));
 
 
 

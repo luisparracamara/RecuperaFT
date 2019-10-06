@@ -18,6 +18,9 @@ ctrl.agregarUsuario = (req,res) => {
     })
 }
 
+
+
+
 ctrl.getTodo = (req,res) => {
     res.send({
         hola: "hola"

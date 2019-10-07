@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === "dev") {
     urlDB = process.env.urlDBDev
     ambiente = "Desarrollo";
 } else {
-    //urlDB = process.env.urlDBProd;
-    urlDB = 'mongodb+srv://cafe-user:luisparra@recuperaft-igqhw.mongodb.net/recuperaft?retryWrites=true&w=majority'
+    urlDB = process.env.urlDBProd;
+    //urlDB = 'mongodb+srv://cafe-user:luisparra@recuperaft-igqhw.mongodb.net/recuperaft?retryWrites=true&w=majority'
     ambiente = "Producción";
 }
 process.env.URLDB = urlDB;

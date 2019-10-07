@@ -50,7 +50,7 @@ app.use(middleware.segundo);
 
 //Conectarse a la base de datos
 //---cambiar en la url de mongo atlas la parte de ?admin por el nombre de la base de datos
-mongoose.connect('mongodb+srv://cafe-user:luisparra@recuperaft-igqhw.mongodb.net/recuperaft?retryWrites=true&w=majority', {
+mongoose.connect(process.env.URLDB, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true

@@ -8,7 +8,7 @@ const { validaRegistro }  = require('../middleware/registro-validaciones.js');
 
 //LISTADO DE LAS RUTAS
 router.get("/", usuarios.getTodo);
-router.post("/registrar", [checkAuth,validaRegistro], usuarios.agregarUsuario);
+router.post("/registrar", [validaRegistro], usuarios.agregarUsuario);
 router.post("/login", usuarios.loginUsuario);
 
 

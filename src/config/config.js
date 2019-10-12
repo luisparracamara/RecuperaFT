@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "dev") {
     ambiente = "Desarrollo";
 } else {
     urlDB = process.env.urlDBProd;
-    //urlDB = 'mongodb+srv://cafe-user:luisparra@recuperaft-igqhw.mongodb.net/recuperaft?retryWrites=true&w=majority'
+    //crear variable de entorno en HEROKU con el comando: heroku config:set urlDBProd='mongodb+srv://cafe-user:luisparra@recuperaft-igqhw.mongodb.net/recuperaft?retryWrites=true&w=majority'
     ambiente = "Producción";
 }
 process.env.URLDB = urlDB;

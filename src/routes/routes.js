@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require('mongoose');
 const usuarios = require("../controllers/usuarios.js");
+const mongoose = require('mongoose');
+const checkAuth = require("../middleware/check-auth");
+const { validaRegistro }  = require('../middleware/registro-validaciones.js');
 
 
 //LISTADO DE LAS RUTAS
 router.get("/", usuarios.getTodo);
-router.get("/usuarios",usuarios.agregarUsuario);
-router.post("/usuarios",usuarios.agregarUsuario);
+router.post("/registrar", [checkAuth,validaRegistro], usuarios.agregarUsuario);
+router.post("/login", usuarios.loginUsuario);
 
 
 module.exports = router;

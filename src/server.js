@@ -5,7 +5,6 @@ const morgan = require("morgan");
 const mongoose = require('mongoose');
 
 const config = require("./config/config.js");
-const routes = require("./routes/routes.js");
 const middleware = require("./middleware/error.js");
 
 const app = express();

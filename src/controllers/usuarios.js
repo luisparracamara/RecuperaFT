@@ -86,6 +86,7 @@ ctrl.loginUsuario = async(req,res) => {
 
     try {
         const loginUsuario = await Usuario.findOne({ username: req.body.username }).exec();
+        console.log(loginUsuario);
         
         if (loginUsuario<1) {
             return res.status(401).json({

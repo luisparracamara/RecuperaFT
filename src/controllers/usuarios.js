@@ -91,7 +91,7 @@ ctrl.loginUsuario = async(req,res) => {
         if (loginUsuario<1) {
             return res.status(401).json({
                 message: "La contraseña o usuario no coinciden",
-                loginUsuario
+                
             });
         }
 
@@ -99,7 +99,7 @@ ctrl.loginUsuario = async(req,res) => {
         try {
             const autentificacion = bcrypt.compareSync(req.body.password, loginUsuario.password);
             
-            if (autentificacion===true) {
+            if (autentificacion===false) {
 
                const token = jwt.sign({
                     username: loginUsuario.username,

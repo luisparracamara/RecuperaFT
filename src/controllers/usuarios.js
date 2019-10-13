@@ -87,7 +87,7 @@ ctrl.loginUsuario = async(req,res) => {
     try {
         const loginUsuario = await Usuario.findOne({ username: req.body.username }).exec();
 
-        res.send(loginUsuario.length)
+        res.send(loginUsuario.username)
       
     
     } catch (error) {

@@ -87,7 +87,13 @@ ctrl.loginUsuario = async(req,res) => {
     try {
         const loginUsuario = await Usuario.findOne({ username: req.body.username }).exec();
 
-        res.send(loginUsuario.password)
+        if (loginUsuario < 1) {
+            return res.status(401).json({
+                message: "La contraseña o usuario no coinciden"
+            });
+        }else{
+            res.send(loginUsuario)
+        }
       
     
     } catch (error) {

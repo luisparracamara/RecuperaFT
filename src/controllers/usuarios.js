@@ -91,9 +91,11 @@ ctrl.loginUsuario = async(req,res) => {
             return res.status(401).json({
                 message: "La contraseña o usuario no coinciden"
             });
-        }else{
-            res.send(loginUsuario)
         }
+
+        const autentificacion = bcrypt.compareSync(req.body.password, loginUsuario.password);
+        res.send(autentificacion)
+        
       
     
     } catch (error) {

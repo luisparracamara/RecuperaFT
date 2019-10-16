@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 
 const config = require("./config/config.js");
 const middleware = require("./middleware/error.js");
+const passport = require("passport");
+const session = require("express-session");
 
 const app = express();
 
@@ -13,9 +15,24 @@ const app = express();
 //configuraciones
 app.set("puerto", port);
 
-
 //middlewares
 app.use(morgan('dev'));
+
+
+//passport config
+require("./config/passport")(passport);
+//sesiones de express
+app.use(session({
+    secret: process.env.JWT_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 //leer lo que llega del body
 app.use(bodyParser.urlencoded({extended: false}));
@@ -52,7 +69,8 @@ app.use(middleware.segundo);
 mongoose.connect(process.env.URLDB, {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 }).then(db => console.log("db conectada"))
     .catch(err => console.log(err));
 

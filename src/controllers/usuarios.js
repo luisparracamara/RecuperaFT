@@ -1,11 +1,6 @@
 const ctrl = {}
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-
 const Usuario = require('../models/Usuario.js');
-
-
 
 
 ctrl.agregarUsuario = async (req, res) => {
@@ -81,57 +76,106 @@ ctrl.agregarUsuario = async (req, res) => {
 }//termina agrgar usuario
 
 
-
-ctrl.loginUsuario = async(req,res) => {
-
+ctrl.editarUsuario = async(req,res) => {
+  
     try {
-        const loginUsuario = await Usuario.findOne({ username: req.body.username }).exec();
+      let id = req.params.id
+      const { nombre, apellido, username, password, rol } = req.body;
 
-        if (loginUsuario < 1) {
-            return res.status(401).json({
-                message: "La contraseña o usuario no coinciden"
+      const buscarUsername = await Usuario.find({ username: username }).exec();
 
-            });
-        }
-
-
-        try {
-            const autentificacion = bcrypt.compareSync(req.body.password, loginUsuario.password);
-
-            if (autentificacion === true) {
-
-                const token = jwt.sign({
-                    username: loginUsuario.username,
-                    id: loginUsuario._id,
-                    rol: loginUsuario.rol,
-                }, process.env.JWT_KEY, { expiresIn: '1h' })
-
-                return res.status(200).json({
-                    message: "Autenticación válida",
-                    token
-                });
-            } else {
-                return res.status(401).json({
-                    message: "La contraseña o usuario no coinciden"
-                });
-            }
-        } catch (error) {
-            return res.status(401).json({
-                message: "La contraseña o usuario no coinciden",
-            });
-        }
-        
+        if (buscarUsername[0]._id != id) {
+          return res.status(404).json({
+              message: "No se encontró el usuario"
+          })
+      }
       
-    
-    } catch (error) {
-        return res.status(500).json({
-            error
+        if (buscarUsername.length >= 1 && buscarUsername[0]._id != id) {
+          return res.status(409).json({
+              message: "Usuario existente, introduzca otro"
+          })
+      }
+
+       bcrypt.hash(password, 10, async(err, hash) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                })
+            }   
+
+           let usuarioActualizado =  await Usuario.findByIdAndUpdate(id, {
+               nombre,
+               apellido,
+               username,
+               password: hash,
+               rol
+           }, { new: true, runValidators: true })
+           
+           return res.status(200).json({
+               ok: true,
+               message: "Usuario actualizado con éxito",
+               usuarioActualizado
+           })
+
         });
-    }  
-       
-}//fin del login
+    
+  } catch (error) {
+     return res.status(400).json({
+          ok: false,
+          message: "Error, intente de nuevo",
+          error
+      })
+  }
 
 
+}
+
+
+ctrl.eliminarUsuario = async(req,res) => {
+   try {
+       let id = req.params.id;
+
+       let usuarioEncontrado = await Usuario.findOne({ _id: id });
+
+       if (usuarioEncontrado != null) {
+           await Usuario.findByIdAndDelete({ _id: id });
+
+           res.status(200).json({
+               ok: true,
+               message: "Usuario borrado correctamente"
+           })
+       }else{
+           res.status(500).json({
+               ok: false,
+               message: "No se encontró usuario a eliminar"
+           })
+       }
+           
+   } catch (error) {
+       res.status(500).json({
+           ok: false,
+           message: "Error al eliminar usuario"
+       })
+   }
+}
+
+
+ctrl.listarUsuario = async(req,res) => {
+    try {
+        let usuarios = await Usuario.find({}).exec()
+
+        res.status(302).json({
+            usuarios
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            message: "Error de usuarios",
+            error
+        })
+    }
+}
 
 
 

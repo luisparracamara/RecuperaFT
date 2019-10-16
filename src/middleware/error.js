@@ -1,5 +1,5 @@
 const middleware = {};
-
+//renderizar a la pagina 404
 middleware.primer = ((req, res, next) => {
     const error = new Error("Ruta no encontrada");
     res.status(404);

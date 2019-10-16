@@ -38,7 +38,12 @@ let validaRegistro = (req, res, next) => {
         if (errores.length >= 1) {
             return res.status(401).json({
                 ok: false,
-                errores
+                errores,
+                nombre: req.body.nombre,
+                apellido: req.body.apellido,
+                username: req.body.username,
+                password: req.body.password,
+                rol: req.body.rol
             })
         }
 

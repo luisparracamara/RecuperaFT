@@ -22,8 +22,8 @@ router.delete("/registrar/:id", [verificaToken, verificaAdminRol],usuarios.elimi
 router.get("/usuarios", [verificaToken, verificaAdminRol], usuarios.listarUsuario);
 
 //CITAS
-router.post("/citas", [validarCita], citas.agregarCita);
-router.put("/citas", [validarCita], citas.editarCita);
+//router.post("/citas", [validarCita], citas.agregarCita);
+
 
 
 

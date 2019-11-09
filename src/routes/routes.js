@@ -22,10 +22,10 @@ router.delete("/registrar/:id", [verificaToken, verificaAdminRol],usuarios.elimi
 router.get("/usuarios", [verificaToken, verificaAdminRol], usuarios.listarUsuario);
 
 //CITAS
-//router.post("/citas", [validarCita], citas.agregarCita);
-
-
-
+router.post("/citas", [verificaToken, validarCita], citas.agregarCita);
+router.put("/citas/:id", [verificaToken, validarCita], citas.editarCita);
+router.delete("/citas/:id", [verificaToken], citas.borrarCita);
+router.get("/citas", [verificaToken], citas.listarCita)
 
 
 //login con passport

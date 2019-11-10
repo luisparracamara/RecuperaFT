@@ -165,6 +165,12 @@ ctrl.listarUsuario = async(req,res) => {
     try {
         let usuarios = await Usuario.find({}).exec()
 
+        if (usuarios.length <= 0) {
+            return res.status(404).json({
+                message: "No hay usuarios registrados"
+            })
+        }
+
         res.status(302).json({
             usuarios
         })

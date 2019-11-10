@@ -58,7 +58,7 @@ ctrl.agregarCita = async (req, res) => {
 
             await cita.save();
 
-            res.status(200).json({
+            res.status(201).json({
                 ok: true,
                 cita
             })
@@ -170,19 +170,19 @@ ctrl.borrarCita = async(req,res) => {
         let id = req.params.id;
         let usuarioEncontrado = await Cita.findOne({ _id: id });
 
-        if (usuarioEncontrado.length >= 1) {
-            await Cita.findByIdAndDelete({ _id: id });
-
-            res.status(200).json({
-                ok: true,
-                message: "Cita borrada correctamente",
-            })
-        } else {
-            res.status(500).json({
+        if (usuarioEncontrado === null) {
+            return res.status(500).json({
                 ok: false,
                 message: "No se encontró la cita a eliminar"
             })
         }
+
+        await Cita.findByIdAndDelete({ _id: id });
+
+        return res.status(200).json({
+            ok: true,
+            message: "Cita borrada correctamente",
+        })
         
     } catch (error) {
         res.status(500).json({
@@ -192,13 +192,19 @@ ctrl.borrarCita = async(req,res) => {
         })
     }
    
-    
+   
 }
 
 
 ctrl.listarCita = async (req, res) => {
     try {
         let citas = await Cita.find({}).exec()
+
+        if (citas.length <= 0) {
+            return res.status(404).json({
+                message: "No hay citas registradas"
+            })
+        }
 
         res.status(302).json({
             citas

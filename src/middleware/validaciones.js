@@ -114,8 +114,49 @@ let validarCita = (req,res,next) => {
 
 
 
+let validarServicio = (req, res, next) => {
+    try {
+
+        const errores = [];
+
+        if (!req.body.nombre) {
+            errores.push({
+                message: "Introduzca nombre"
+            })
+        }
+
+        if (!req.body.precio || !Number(req.body.precio)) {
+            errores.push({
+                message: "Introduzca un precio válido"
+            })
+        }
+
+
+        if (errores.length >= 1) {
+            return res.status(401).json({
+                ok: false,
+                errores,
+                datos: {
+                    nombre: req.body.nombre,
+                    telefono: req.body.precio,
+                    descripcion: req.body.descripcion
+                }
+            })
+        }
+        next();
+        
+    } catch (error) {
+        res.status(401).json({
+            message: "Error al registrar servicio"
+        })
+    }
+}
+
+
+
 
 module.exports = {
     validaRegistro,
-    validarCita
+    validarCita,
+    validarServicio
 }

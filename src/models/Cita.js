@@ -6,6 +6,8 @@ const citaSchema = new Schema({
     telefono: { type: Number, required: true},
     fecha: { type: Date, required: true},
     descripcion: { type: String },
+    medio: { type: String },
+    redsocial: { type: String },
     estado: {type: String, default:"en espera"}
 })
 

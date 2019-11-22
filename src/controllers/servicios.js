@@ -1,5 +1,6 @@
 ctrl = {};
-const Servicio = require('../models/Servicio.js');
+const { Servicio } = require("../models/index.js");
+
 
 ctrl.agregarServicio =  async(req, res) => {
     

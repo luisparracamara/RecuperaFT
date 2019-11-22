@@ -1,7 +1,8 @@
 const ctrl = {};
-const Cita = require('../models/Cita.js');
+const { Cita } = require("../models/index.js");
 const moment = require('moment');
 moment.locale('es');
+const helper = require('../helpers/helper-citas.js');
 
 
 ctrl.agregarCita = async (req, res) => {
@@ -12,12 +13,14 @@ ctrl.agregarCita = async (req, res) => {
         let disponibilidadUltimo = true;
         let disponibilidadProximo = true;
 
-        
+
         const cita = new Cita({
             nombre: req.body.nombre,
             telefono: req.body.telefono,
             fecha: fechaCita,
-            descripcion: req.body.descripcion
+            descripcion: req.body.descripcion,
+            medio: req.body.medio,
+            redsocial: req.body.redsocial
         });
 
 
@@ -26,33 +29,22 @@ ctrl.agregarCita = async (req, res) => {
                 message: "Hora de cita no válida"
             })
         }
-
-
-        //ERROR , RESTAR MEDIA HORA A CADA FECHA, PARA ABARCAR MEDIA HORA ANTES Y MEDIA HORA DESPÚES DE LA CITA PEDIDA// YA resuelto
     
 
-        let ultimaCita = await Cita.find({ fecha: { $lte: (fechaCita) } } && { estado: "en espera" })
-            .sort({ fecha: "desc" }).limit(1).exec();
+        let ultimaCita = await Cita.find( { estado: "en espera" } && { fecha: { $lte: (fechaCita) } })
+            .sort({ fecha: "desc" }).limit(1);
         
         if (ultimaCita.length >= 1) {
-            let fechaUltimaCita = ultimaCita[0].fecha;
-            let ultimaCitaSuma = moment(fechaUltimaCita).add(29, 'minutes').utc();
-            let ultimaCitaResta = moment(fechaUltimaCita).subtract(29, 'minutes').utc();
-            disponibilidadUltimo = !moment(fechaCita).isBetween(ultimaCitaResta, ultimaCitaSuma, null, '[');  
+            disponibilidadUltimo = helper.verificarUltimaCita(ultimaCita, fechaCita);
         }
 
 
-        let proximaCita = await Cita.find({ fecha: { $gte: (fechaCita) } } && { estado: "en espera" })
-            .sort({ fecha: "asc" }).limit(1).exec();
+        let proximaCita = await Cita.find( { estado: "en espera" } && { fecha: { $gte: (fechaCita) } })
+            .sort({ fecha: "asc" }).limit(1);
             
-
         if (proximaCita.length >= 1) {
-            let fechaProximaCita = proximaCita[0].fecha;
-            let proximaCitaResta = moment(fechaProximaCita).subtract(29, 'minutes').utc();
-            let proximaCitaSuma = moment(fechaProximaCita).add(29, 'minutes').utc();
-            disponibilidadProximo = !moment(fechaCita).isBetween(proximaCitaResta, proximaCitaSuma, null, '[');         
+            disponibilidadProximo = helper.verificarProximaCita(proximaCita, fechaCita);
         }
-
 
         if (disponibilidadUltimo === true && disponibilidadProximo === true) {
 
@@ -94,7 +86,7 @@ ctrl.editarCita = async (req, res) => {
         let disponibilidadProximo = true;
         
         let id = req.params.id;
-        const { nombre, telefono, descripcion, estado } = req.body;
+        const { nombre, telefono, descripcion, estado, medio, redsocial } = req.body;
 
         if (moment(fechaCita).isBefore(hoy) === true) {
             return res.status(406).json({
@@ -102,45 +94,40 @@ ctrl.editarCita = async (req, res) => {
             })
         }
 
-        let ultimaCita = await Cita.find({ fecha: { $lte: (fechaCita) } } && { estado: "en espera" } && { _id: { $ne: (id) } })
-            .sort({ fecha: "desc" }).limit(1).exec();
+        let ultimaCita = await Cita.find( { estado: "en espera" } && { fecha: { $lte: (fechaCita) } } && { _id: { $ne: (id) } })
+            .sort({ fecha: "desc" }).limit(1);
 
         if (ultimaCita.length >= 1) {
-            let fechaUltimaCita = ultimaCita[0].fecha;
-            let ultimaCitaSuma = moment(fechaUltimaCita).add(29, 'minutes').utc();
-            let ultimaCitaResta = moment(fechaUltimaCita).subtract(29, 'minutes').utc();
-            disponibilidadUltimo = !moment(fechaCita).isBetween(ultimaCitaResta, ultimaCitaSuma, null, '[');
+            disponibilidadUltimo = helper.verificarUltimaCita(ultimaCita, fechaCita);
         }
 
 
-        let proximaCita = await Cita.find({ fecha: { $gte: (fechaCita) } } && { estado: "en espera" } && { _id: { $ne: (id) } })
-            .sort({ fecha: "asc" }).limit(1).exec();
+        let proximaCita = await Cita.find( { estado: "en espera" } && { fecha: { $gte: (fechaCita) } } && { _id: { $ne: (id) } })
+            .sort({ fecha: "asc" }).limit(1);
 
 
         if (proximaCita.length >= 1) {
-            let fechaProximaCita = proximaCita[0].fecha;
-            let proximaCitaResta = moment(fechaProximaCita).subtract(29, 'minutes').utc();
-            let proximaCitaSuma = moment(fechaProximaCita).add(29, 'minutes').utc();
-            disponibilidadProximo = !moment(fechaCita).isBetween(proximaCitaResta, proximaCitaSuma, null, '[');
+            disponibilidadProximo = helper.verificarProximaCita(proximaCita, fechaCita);
         }
 
 
         if (disponibilidadUltimo === true && disponibilidadProximo === true) {
 
             let citaActualizada = await Cita.findByIdAndUpdate(id, {
+                estado,
                 nombre,
                 telefono,
                 fecha: fechaCita,
                 descripcion,
-                estado
+                medio,
+                redsocial  
+
             }, { new: true, runValidators: true })
 
             return res.status(200).json({
                 ok: true,
                 message: "Cita actualizada con éxito",
-                citaActualizada,
-                ultimaCita,
-                proximaCita
+                citaActualizada
             })
 
         } else {

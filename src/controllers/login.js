@@ -1,7 +1,7 @@
 const ctrl = {}
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Usuario = require('../models/Usuario.js');
+const { Usuario } = require("../models/index.js");
 const passport = require("passport");
 
 

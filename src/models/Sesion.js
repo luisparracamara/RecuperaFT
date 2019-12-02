@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const sesionSchema = new Schema({
-    descripcion: { type: String, required: true },
+    detalleTratamiento: [{ type: Schema.ObjectId, ref: "DetalleTratamiento" }],
     numeroSesion: { type: Number, required: true },
-    deuda: { type: Number, required: true },
+    abono: { type: Number, required: true },
     fecha: {type: Date, required: true},
-    observaciones: { type: String },
-    paqueteId: { type: Schema.ObjectId, ref: "Paquete" }
+    comentarios: { type: String },
+    tratamientoId: [{ type: Schema.ObjectId, ref: "Tratamiento" }]
 })
 
 module.exports = mongoose.model('Sesion', sesionSchema);

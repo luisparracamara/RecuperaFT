@@ -4,7 +4,7 @@ const router = express.Router();
 const { verificaToken, verificaAdminRol} = require("../middleware/check-auth");
 const { validaRegistro, validarCita, validarServicio, validarCliente, validarDiagnostico }  = require('../middleware/validaciones.js');
 
-const { usuarios, login ,citas ,servicios, clientes, diagnostico} = require('../controllers/index.js');
+const { usuarios, login ,citas ,servicios, clientes, diagnostico, tratamiento} = require('../controllers/index.js');
 
 //LISTADO DE LAS RUTAS
 
@@ -31,14 +31,22 @@ router.delete("/servicios/:id", [verificaToken], servicios.borrarServicio);
 router.get("/servicios", [verificaToken], servicios.listarServicio);
 
 //CLIENTES
-router.post("/clientes", [validarCliente], clientes.agregarCliente);
+router.post("/clientes", clientes.agregarCliente);
+router.put("/clientes/:id", clientes.editarCliente);
+router.delete("/clientes/:id", clientes.borrarCliente);
 router.get("/clientes", clientes.listarCliente);
+
 
 //DIAGNOSITCO
 router.post("/diagnostico/:id", [validarDiagnostico], diagnostico.agregarDiagnostico);
 router.put("/diagnostico/:id", [validarDiagnostico], diagnostico.editarDiagnostico);
 router.delete("/diagnostico/:id", diagnostico.borrarDiagnostico);
 router.get("/diagnostico/", diagnostico.listarDiagnostico);
+
+//TRATAMIENTO
+router.post("/tratamiento/:id", tratamiento.agregarTratamiento);
+router.post("/detalle/:id", tratamiento.agregarDetalleTratamiento);
+router.post("/sesion/:id", tratamiento.agregarSesion);
 
 //login con passport
 router.post("/login2", login.login2);

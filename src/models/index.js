@@ -3,5 +3,8 @@ module.exports = {
     Cliente: require('./Cliente'),
     Usuario: require('./Usuario'),
     Servicio: require('./Servicio'),
-    Diagnostico: require("./Diagnostico")
+    Diagnostico: require("./Diagnostico"),
+    Tratamiento: require("./Tratamiento"),
+    Sesion: require("./Sesion"),
+    DetalleTratamiento: require("./DetalleTratamiento")
 }

@@ -49,6 +49,17 @@ ctrl.editarDiagnostico = async (req, res) => {
     try {
         let diagnosticoId = req.params.id;
         const { padecimiento, diagnostico, clienteId } = req.body;
+        
+        let buscarCliente = await Cliente.findById( clienteId );
+        let verificar = buscarCliente.diagnostico.includes(diagnosticoId);
+
+        if (verificar === false) {
+            return res.status(406).json({
+                ok: false,
+                message: "Error al actualizar diagnóstico, no coincide la información"
+            })
+        }
+        
 
         let diagnosticoActualizado = await Diagnostico.findByIdAndUpdate(diagnosticoId, {
             clienteId,

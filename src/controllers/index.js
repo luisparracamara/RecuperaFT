@@ -4,5 +4,6 @@ module.exports = {
     citas: require("./citas.js"),
     servicios: require("./servicios.js"),
     clientes: require("./clientes.js"),
-    diagnostico: require("./diagnostico")
+    diagnostico: require("./diagnostico"),
+    tratamiento: require("./tratamiento")
 }

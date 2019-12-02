@@ -20,9 +20,13 @@ function verificarProximaCita(proximaCita, fechaCita) {
    return disponibilidadProximo;
 }
 
+function dateNow(){
+  return moment().utc("-7:00");
+}
+
 
 
 
 module.exports = {
-   verificarUltimaCita, verificarProximaCita
+   verificarUltimaCita, verificarProximaCita, dateNow
 };

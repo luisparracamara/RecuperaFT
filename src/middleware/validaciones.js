@@ -186,13 +186,6 @@ let validarCliente = (req,res,next) => {
             })
         }
 
-        if (!Number(req.body.telefono2)) {
-            errores.push({
-                message: "Introduzca un segundo teléfono válido"
-            })
-        }
-
-
         if (req.body.sexo != "masculino" && req.body.sexo != "femenino") {
             errores.push({
                 message: "Introduzca un sexo válido"
@@ -208,7 +201,6 @@ let validarCliente = (req,res,next) => {
                     nombre: req.body.nombre,
                     edad: req.body.edad,
                     telefono: req.body.telefono,
-                    telefono2: req.body.telefono2,
                     redsocial: req.body.redsocial,
                     comentarios: req.body.comentarios,
                 }
@@ -228,12 +220,6 @@ let validarCliente = (req,res,next) => {
 let validarDiagnostico = (req, res, next) => {
     try {
         const errores = [];
-
-        if (!req.body.padecimiento || !req.body.diagnostico) {
-            errores.push({
-                message: "Llene todos los campos obligatorios"
-            })
-        }
 
         if (req.body.padecimiento === "" || req.body.diagnostico === "") {
             errores.push({

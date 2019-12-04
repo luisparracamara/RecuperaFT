@@ -5,7 +5,7 @@ const clienteSchema = new Schema({
     nombre: { type: String, required: true },
     edad: { type: Number, required: true },
     sexo: { type: String, required: true },
-    telefono: [{ type: Number, required: true }],
+    telefono: { type: Number, required: true },
     fecha: {type: Date, required: true},
     redsocial: { type: String },
     comentarios: { type: String },

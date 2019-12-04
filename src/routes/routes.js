@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const { verificaToken, verificaAdminRol} = require("../middleware/check-auth");
-const { validaRegistro, validarCita, validarServicio, validarCliente, validarDiagnostico }  = require('../middleware/validaciones.js');
+const { validaRegistro, validarCita, validarServicio, validarCliente, validarDiagnostico, validarDetalleTratamiento }  = require('../middleware/validaciones.js');
 
-const { usuarios, login ,citas ,servicios, clientes, diagnostico, tratamiento} = require('../controllers/index.js');
+const { usuarios, login, citas, servicios, clientes, diagnostico, tratamiento, detalleTratamiento} = require('../controllers/index.js');
 
 //LISTADO DE LAS RUTAS
 
@@ -25,13 +25,13 @@ router.delete("/citas/:id",  citas.borrarCita);
 router.get("/citas", [verificaToken], citas.listarCita)
 
 //SERVICIO
-router.post("/servicios", [verificaToken,validarServicio], servicios.agregarServicio);
+router.post("/servicios", [validarServicio], servicios.agregarServicio);
 router.put("/servicios/:id", [verificaToken,validarServicio], servicios.editarServicio);
 router.delete("/servicios/:id", [verificaToken], servicios.borrarServicio);
 router.get("/servicios", [verificaToken], servicios.listarServicio);
 
 //CLIENTES
-router.post("/clientes", clientes.agregarCliente);
+router.post("/clientes", [validarCliente], clientes.agregarCliente);
 router.put("/clientes/:id", clientes.editarCliente);
 router.delete("/clientes/:id", clientes.borrarCliente);
 router.get("/clientes", clientes.listarCliente);
@@ -45,8 +45,13 @@ router.get("/diagnostico/", diagnostico.listarDiagnostico);
 
 //TRATAMIENTO
 router.post("/tratamiento/:id", tratamiento.agregarTratamiento);
-router.post("/detalle/:id", tratamiento.agregarDetalleTratamiento);
 router.post("/sesion/:id", tratamiento.agregarSesion);
+
+//DETALLE TRATAMIENTO
+router.post("/detalle/:id", [validarDetalleTratamiento], detalleTratamiento.agregarDetalleTratamiento);
+router.put("/detalle/:id", detalleTratamiento.editarDetalleTratamiento);
+router.delete("/detalle/:id", detalleTratamiento.borrarDetalleTratamiento);
+router.get("/detalle", detalleTratamiento.listarDetalleTratamiento);
 
 //login con passport
 router.post("/login2", login.login2);

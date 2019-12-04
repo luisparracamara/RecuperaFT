@@ -27,6 +27,7 @@ ctrl.agregarCliente = async (req, res) => {
       redsocial,
       comentarios
     })
+    
 
     //BOTON QUE PREGUNTE SI QUIERO CARGAR LOS DATOS DE FULANITO
     //fecha hoy en lugar de fecha ESTO SIRVE PARA PONER ESTOS DATOS QUE TAMBIEN VAN EN CITA

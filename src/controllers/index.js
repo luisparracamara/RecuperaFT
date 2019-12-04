@@ -5,5 +5,6 @@ module.exports = {
     servicios: require("./servicios.js"),
     clientes: require("./clientes.js"),
     diagnostico: require("./diagnostico"),
-    tratamiento: require("./tratamiento")
+    tratamiento: require("./tratamiento"),
+    detalleTratamiento: require("./detalleTratamiento")
 }

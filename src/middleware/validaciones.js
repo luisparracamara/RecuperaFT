@@ -7,25 +7,25 @@ let validaRegistro = (req, res, next) => {
     try {
         const errores = [];
 
-        if (!req.body.nombre) {
+        if (!req.body.nombre || !req.body.nombre === "") {
             errores.push({
                 message: "Introduzca nombre"
             })
         }
 
-        if (!req.body.apellido) {
+        if (!req.body.apellido || !req.body.apellido === "") {
             errores.push({
                 message: "Introduzca apellido"
             })
         }
 
-        if (!req.body.username) {
+        if (!req.body.username || !req.body.username === "") {
             errores.push({
                 message: "Introduzca nombre de usuario"
             })
         }
 
-        if (!req.body.password) {
+        if (!req.body.password || !req.body.password === "") {
             errores.push({
                 message: "Introduzca contraseña"
             })
@@ -70,13 +70,13 @@ let validarCita = (req,res,next) => {
     try {
         const errores = [];
 
-        if (!req.body.nombre) {
+        if (!req.body.nombre || !req.body.nombre === "" ) {
             errores.push({
-                message: "Introduzca nombre"
+                message: "Introduzca un nombre"
             })
         }
 
-        if (!req.body.telefono || !Number(req.body.telefono) ) {
+        if (Math.sign(req.body.telefono) != 1 ) {
             errores.push({
                 message: "Introduzca un teléfono válido"
             })
@@ -130,13 +130,13 @@ let validarServicio = (req, res, next) => {
 
         const errores = [];
 
-        if (!req.body.nombre) {
+        if (!req.body.nombre || req.body.nombre === "" ) {
             errores.push({
                 message: "Introduzca nombre"
             })
         }
 
-        if (!req.body.precio || !Number(req.body.precio)) {
+        if (Math.sign(req.body.precio) != 1) {
             errores.push({
                 message: "Introduzca un precio válido"
             })
@@ -149,7 +149,7 @@ let validarServicio = (req, res, next) => {
                 errores,
                 datos: {
                     nombre: req.body.nombre,
-                    telefono: req.body.precio,
+                    precio: req.body.precio,
                     descripcion: req.body.descripcion
                 }
             })
@@ -168,19 +168,19 @@ let validarCliente = (req,res,next) => {
     try {
         const errores = [];
 
-        if (req.body.nombre === "" || req.body.edad === "") {
+        if (req.body.nombre === "" || req.body.edad === "" || !req.body.nombre || !req.body.edad ) {
             errores.push({
                 message: "Llene todos los campos obligatorios"
             })
         }
 
-        if (!Number(req.body.edad) && req.body.edad <= 0) {
+        if (Math.sign(req.body.edad) != 1) {
             errores.push({
                 message: "Introduzca una edad válida"
             })
         }
 
-        if (!req.body.telefono || !Number(req.body.telefono)) {
+        if (Math.sign(req.body.telefono) != 1) {
             errores.push({
                 message: "Introduzca un teléfono válido"
             })
@@ -221,7 +221,7 @@ let validarDiagnostico = (req, res, next) => {
     try {
         const errores = [];
 
-        if (req.body.padecimiento === "" || req.body.diagnostico === "") {
+        if (req.body.padecimiento === "" || req.body.diagnostico === "" || !req.body.padecimiento || !req.body.diagnostico) {
             errores.push({
                 message: "Llene todos los campos obligatorios"
             })
@@ -248,11 +248,42 @@ let validarDiagnostico = (req, res, next) => {
     }
 }
 
+//este es el bueno, tomar de ejemplo
+let validarDetalleTratamiento = (req, res, next) => {
+    try {
+        const errores = [];
+
+        if (req.body.servicioId === "" || !req.body.servicioId ) {
+            errores.push({message: "Especificar servicio"});
+        }
+        
+        if ( Math.sign(req.body.cantidad) != 1) {
+            errores.push({ message: "Introducir una cantidad válida" });
+        }
+
+        if (errores.length >= 1) {
+            return res.status(401).json({
+                ok: false,
+                errores,
+                datos: {
+                    servicio: req.body.servicioId,
+                    cantidad: req.body.cantidad, 
+                }
+            })
+        }
+        next();
+
+
+    } catch (error) {
+        
+    }
+}
 
 module.exports = {
     validaRegistro,
     validarCita,
     validarServicio,
     validarCliente,
-    validarDiagnostico
+    validarDiagnostico,
+    validarDetalleTratamiento
 }
